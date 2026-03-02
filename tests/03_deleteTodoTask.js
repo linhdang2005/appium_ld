@@ -1,29 +1,27 @@
 const testData = require("../utils/testData.json");
-const { parseDate } = require("../utils/dateUtils.js");
-const EditTaskPage = require("../pages/TaskPage.js");
+const TaskPage = require("../pages/TaskPage.js");
 const AllListPage = require("../pages/AllList.js");
-const DatePicker = require("../pages/datePicker.js");
-const { getDriver } = require("../utils/driver.js");
 const { expect } = require("expect");
 
-
-
-
-async function main() {
-    const driver = await getDriver();
-    const editTaskPage = new EditTaskPage(driver);
-    const datePicker = new DatePicker(driver);
-    const allListPage = new AllListPage(driver);
-
-    // Open Task detail screen
-    await allListPage.clickOnTodoItem(testData.taskName_edit);
-   // delete task
-   await editTaskPage.deleteTask();
-
-     //Verify the task is deleted on the list
-    expect(await allListPage.isTodoDisplayed( testData.taskName_edit)).toBe(false);
-
-    console.log("Delete Task successuflly");
+async function step(label, action) {
+  console.log(`[STEP] ${label}`);
+  await action();
 }
 
-main().catch(console.error);
+describe("Delete Todo Task", function () {
+  this.timeout(60000);
+
+  it("should delete existing task successfully", async function () {
+    await step("Open task to delete", async () => {
+      await AllListPage.clickOnTodoItem(testData.taskName_edit);
+    });
+
+    await step("Delete task and confirm", async () => {
+      await TaskPage.deleteTask();
+    });
+
+    await step("Verify task is removed", async () => {
+      expect(await AllListPage.isTodoDisplayed(testData.taskName_edit)).toBe(false);
+    });
+  });
+});

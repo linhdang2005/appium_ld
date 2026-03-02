@@ -1,30 +1,26 @@
-class DatePicker {
-  constructor(driver) {
-    this.driver = driver;
-  }
+const { getDriver } = require("../utils/driver.js");
 
+class DatePicker {
   // day define
   dayByNumber(day) {
-    return this.driver.$(
-      `//android.view.View[@text="${day}"]`
-    );
+    return getDriver().$(`//android.view.View[@text="${day}"]`);
   }
 
   // month year header
   get monthYearHeader() {
-    return this.driver.$("id=android:id/date_picker_header_date");
+    return getDriver().$("id=android:id/date_picker_header_date");
   }
 
   // OK and Cancel buttons
   get okButton() {
-    return this.driver.$("id=android:id/button1");
+    return getDriver().$("id=android:id/button1");
   }
 
   get cancelButton() {
-    return this.driver.$("id=android:id/button2");
+    return getDriver().$("id=android:id/button2");
   }
 
-  //Action
+  // Action
   async selectDay(day) {
     const dayElement = this.dayByNumber(day);
     await dayElement.waitForDisplayed();
@@ -32,8 +28,9 @@ class DatePicker {
   }
 
   async confirm() {
+    await this.okButton.waitForDisplayed();
     await this.okButton.click();
   }
 }
 
-module.exports = DatePicker;
+module.exports = new DatePicker();
