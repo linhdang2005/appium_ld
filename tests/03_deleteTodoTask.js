@@ -1,4 +1,4 @@
-const testData = require("../utils/testData.json");
+const testData = require("../data/testData.json");
 const TaskPage = require("../pages/TaskPage.js");
 const AllListPage = require("../pages/AllList.js");
 const { expect } = require("expect");

@@ -2,29 +2,35 @@ const BasePage = require("./BasePage.js");
 const { getDriver } = require("../utils/driver.js");
 
 class NewTaskPage extends BasePage {
-  // Enter task name input field
+  constructor() {
+    super();
+    this.locators = {
+      editTaskName: "id=com.splendapps.splendo:id/edtTaskName",
+      dueDateField: "id=com.splendapps.splendo:id/edtDueD",
+      saveTaskButton: "~Save Task",
+      deleteTaskButton: "~Delete Task",
+      deleteConfirmButton: "id=android:id/button1"
+    };
+  }
+
   get editTaskName() {
-    return getDriver().$("id=com.splendapps.splendo:id/edtTaskName");
+    return getDriver().$(this.locators.editTaskName);
   }
 
-  // Due date field
   get dueDateField() {
-    return getDriver().$("id=com.splendapps.splendo:id/edtDueD");
+    return getDriver().$(this.locators.dueDateField);
   }
 
-  // save task
   get saveTaskButton() {
-    return getDriver().$("~Save Task");
+    return getDriver().$(this.locators.saveTaskButton);
   }
 
-  // delete button
   get deleteTaskButton() {
-    return getDriver().$("~Delete Task");
+    return getDriver().$(this.locators.deleteTaskButton);
   }
 
-  // confirm delete button
   get deleteConfirmButton() {
-    return getDriver().$("id=android:id/button1");
+    return getDriver().$(this.locators.deleteConfirmButton);
   }
 
   // open due date picker
@@ -34,31 +40,31 @@ class NewTaskPage extends BasePage {
 
   // Actions
   async enterTaskName(taskName) {
-    await this.editTaskName.waitForDisplayed();
+    await this.waitFor(this.editTaskName);
     await this.editTaskName.addValue(taskName);
   }
 
   async enterTaskNameEdit(taskNameEdit) {
-    await this.editTaskName.waitForDisplayed();
+    await this.waitFor(this.editTaskName);
     await this.editTaskName.clearValue();
     await getDriver().pause(200);
     await this.editTaskName.addValue(taskNameEdit);
   }
 
   async editDueDate() {
-    await this.dueDateField.waitForDisplayed({ timeout: 10000 });
+    await this.waitFor(this.dueDateField, 10000);
     await this.dueDateField.click();
   }
 
   async saveTask() {
-    await this.saveTaskButton.waitForDisplayed({ timeout: 10000 });
+    await this.waitFor(this.saveTaskButton, 10000);
     await this.saveTaskButton.click();
   }
 
   async deleteTask() {
-    await this.deleteTaskButton.waitForDisplayed({ timeout: 10000 });
+    await this.waitFor(this.deleteTaskButton, 10000);
     await this.deleteTaskButton.click();
-    await this.deleteConfirmButton.waitForDisplayed({ timeout: 10000 });
+    await this.waitFor(this.deleteConfirmButton, 10000);
     await this.deleteConfirmButton.click();
   }
 }

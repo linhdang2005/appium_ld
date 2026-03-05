@@ -1,34 +1,43 @@
+const BasePage = require("./BasePage.js");
 const { getDriver } = require("../utils/driver.js");
 
-class DatePicker {
-  // day define
-  dayByNumber(day) {
-    return getDriver().$(`//android.view.View[@text="${day}"]`);
+class DatePicker extends BasePage {
+  constructor() {
+    super();
+    this.locators = {
+      dayByNumber: '//android.view.View[@text="%s"]',
+      monthYearHeader: "id=android:id/date_picker_header_date",
+      okButton: "id=android:id/button1",
+      cancelButton: "id=android:id/button2"
+    };
   }
 
-  // month year header
+  getDayByNumber(day) {
+    const selector = this.locators.dayByNumber.replace("%s", day);
+    return getDriver().$(selector);
+  }
+
   get monthYearHeader() {
-    return getDriver().$("id=android:id/date_picker_header_date");
+    return getDriver().$(this.locators.monthYearHeader);
   }
 
-  // OK and Cancel buttons
   get okButton() {
-    return getDriver().$("id=android:id/button1");
+    return getDriver().$(this.locators.okButton);
   }
 
   get cancelButton() {
-    return getDriver().$("id=android:id/button2");
+    return getDriver().$(this.locators.cancelButton);
   }
 
   // Action
   async selectDay(day) {
-    const dayElement = this.dayByNumber(day);
-    await dayElement.waitForDisplayed();
+    const dayElement = this.getDayByNumber(day);
+    await this.waitFor(dayElement);
     await dayElement.click();
   }
 
   async confirm() {
-    await this.okButton.waitForDisplayed();
+    await this.waitFor(this.okButton);
     await this.okButton.click();
   }
 }

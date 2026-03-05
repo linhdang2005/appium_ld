@@ -2,14 +2,21 @@ const BasePage = require("./BasePage.js");
 const { getDriver } = require("../utils/driver.js");
 
 class AllListsPage extends BasePage {
-  // Add button
-  get addButton() {
-    return getDriver().$("~Add Task");
+  constructor() {
+    super();
+    this.locators = {
+      addButton: "~Add Task",
+      todoItemByName: '//android.widget.TextView[@text="%s"]'
+    };
   }
 
-  // Todo item
-  todoItemByName(name) {
-    return getDriver().$(`//android.widget.TextView[@text="${name}"]`);
+  get addButton() {
+    return getDriver().$(this.locators.addButton);
+  }
+
+  getTodoItemByName(name) {
+    const selector = this.locators.todoItemByName.replace("%s", name);
+    return getDriver().$(selector);
   }
 
   // Actions
@@ -18,7 +25,7 @@ class AllListsPage extends BasePage {
   }
 
   async isTodoDisplayed(name) {
-    const todo = this.todoItemByName(name);
+    const todo = this.getTodoItemByName(name);
     try {
       return await todo.isDisplayed();
     } catch {
@@ -27,7 +34,7 @@ class AllListsPage extends BasePage {
   }
 
   async clickOnTodoItem(name) {
-    const todoDetail = this.todoItemByName(name);
+    const todoDetail = this.getTodoItemByName(name);
     await this.click(todoDetail);
   }
 }

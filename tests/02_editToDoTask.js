@@ -1,4 +1,4 @@
-const testData = require("../utils/testData.json");
+const testData = require("../data/testData.json");
 const { parseDate } = require("../utils/dateUtils.js");
 const TaskPage = require("../pages/TaskPage.js");
 const AllListPage = require("../pages/AllList.js");
